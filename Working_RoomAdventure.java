@@ -11,8 +11,6 @@ public class Working_RoomAdventure { // Main class containing game logic
     final private static String DEFAULT_STATUS =
         "Sorry, I do not understand. Try [verb] [noun]. Valid verbs include 'go', 'look', and 'take'."; // Default error message
 
-
-
     private static void handleGo(String noun) { // Handles moving between rooms
         String[] exitDirections = currentRoom.getExitDirections(); // Get available directions
         Room[] exitDestinations = currentRoom.getExitDestinations(); // Get rooms in those directions
@@ -52,11 +50,27 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
+    private static void handleEat(String noun){
+        if ("food?".equals(noun)) {
+            for(int i = 0; i < inventory.length; i++) {
+                if ("food?".equals(inventory[i])) {
+                    inventory[i] = null;
+                    death();
+                    break;
+                }
+            }
+        }
+        else {
+            System.out.println("You can't eat that!");
+        }
+    }
+
     private static void setupGame() { // Initializes game world
         Room room1 = new Room("Room 1"); // Create Room 1
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
-        Room room4 = new Room("Room4"); // Create Room 4
+        Room room4 = new Room("Room 4"); // Create Room 4
+        Room kitchen = new Room("Kitchen");
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
         Room[] room1ExitDestinations = {room2, room3}; // Destination rooms for Room 1
@@ -86,8 +100,8 @@ public class Working_RoomAdventure { // Main class containing game logic
         room2.setItemDescriptions(room2ItemDescriptions); // Set item descriptions
         room2.setGrabbables(room2Grabbables); // Set grabbable items
 ////////////////////room 3
-        String[] room3ExitDirections = {"north", "east"}; // Room 3 exits
-        Room[] room3ExitDestinations = {room1, room4}; // Destination rooms for Room 3
+        String[] room3ExitDirections = {"north", "east", "west"}; // Room 3 exits
+        Room[] room3ExitDestinations = {room1, room4, kitchen}; // Destination rooms for Room 3
         String[] room3Items = {"window", "box"}; // Items in Room 3
         String[] room3ItemDescriptions = { // Descriptions for Room 3 items
             "It's noon outside",
@@ -112,6 +126,19 @@ public class Working_RoomAdventure { // Main class containing game logic
         room4.setItems(room4Items); // Set visible items
         room4.setItemDescriptions(room4ItemDescriptions); // Set item descriptions
         room4.setGrabbables(room4Grabbables); // Set grabbable items
+////////////////////Kitchen
+        String[] kitchenExitDirections = {"east"};
+        Room[] kitchenExitDestinations = {room3};
+        String[] kitchenItems = {"stove"};
+        String[] kitchenItemDescriptions = {
+            "It seems very dusty"
+        };
+        String[] kitchenGrabbables = {"food?"};
+        kitchen.setExitDirections(kitchenExitDirections);
+        kitchen.setExitDestinations(kitchenExitDestinations);
+        kitchen.setItems(kitchenItems);
+        kitchen.setItemDescriptions(kitchenItemDescriptions);
+        kitchen.setGrabbables(kitchenGrabbables);
 //////////////////////////////////////////////////////////////////
         currentRoom = room1; // Start game in Room 1
     }
@@ -153,12 +180,20 @@ public class Working_RoomAdventure { // Main class containing game logic
                 case "take": // If verb is 'take'
                     handleTake(noun); // Pick up an item
                     break;
+                case "eat":
+                    handleEat(noun);
+                    break;
                 default: // If verb is unrecognized
                     status = DEFAULT_STATUS; // Set status to error message
             }
 
             System.out.println(status); // Print the status message
         }
+    }
+
+    private static void death() {
+        System.out.println("You have died.");
+        setupGame();
     }
 }
 

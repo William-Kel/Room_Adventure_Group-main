@@ -79,11 +79,12 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
-    private static void handleEat(String noun){
+    private static void handleEat(String noun){ // handles eat
         if ("food?".equals(noun)) {
-            for(int i = 0; i < inventory.length; i++) {
-                if ("food?".equals(inventory[i])) {
-                    inventory[i] = null;
+            for(int f = 0; f < inventory.length; f++) {
+                if ("food?".equals(inventory[f])) {
+                    inventory[f] = null;
+                    status = "";
                     death();
                     break;
                 }
@@ -99,6 +100,7 @@ public class Working_RoomAdventure { // Main class containing game logic
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
         Room room4 = new Room("Room 4"); // Create Room 4
+        Room kitchen = new Room("Kitchen"); //Create Kitchen
         Room HiddenRoom = new Room("Hidden Room");// Create the hidden room
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
@@ -133,8 +135,8 @@ public class Working_RoomAdventure { // Main class containing game logic
         room2.setGrabbables(room2Grabbables); // Set grabbable items
         room2.setThrowables(room2Throwables); // Set throwable items
 ////////////////////room 3
-        String[] room3ExitDirections = {"north", "east"}; // Room 3 exits
-        Room[] room3ExitDestinations = {room1, room4}; // Destination rooms for Room 3
+        String[] room3ExitDirections = {"north", "east", "west"}; // Room 3 exits
+        Room[] room3ExitDestinations = {room1, room4, kitchen}; // Destination rooms for Room 3
         String[] room3Items = {"window", "box"}; // Items in Room 3
         String[] room3ItemDescriptions = { // Descriptions for Room 3 items
             "It's noon outside",
@@ -165,6 +167,19 @@ public class Working_RoomAdventure { // Main class containing game logic
         room4.setGrabbables(room4Grabbables); // Set grabbable items
         room4.setThrowables(room4Throwables); // Set throwable items
         room4.setName(name);
+////////////////////Kitchen
+        String[] kitchenExitDirections = {"east"};
+        Room[] kitchenExitDestinations = {room3};
+        String[] kitchenItems = {"stove"};
+        String[] kitchenItemDescriptions = {
+            "It seems very dusty. Looks like there is some [food?] on the stove."
+        };
+        String[] kitchenGrabbables = {"food?"};
+        kitchen.setExitDirections(kitchenExitDirections);
+        kitchen.setExitDestinations(kitchenExitDestinations);
+        kitchen.setItems(kitchenItems);
+        kitchen.setItemDescriptions(kitchenItemDescriptions);
+        kitchen.setGrabbables(kitchenGrabbables);
 ////////////////////Hidden Room
         String[] HiddenRoomExitDirections = {"west"}; // Hidden Room exits
         Room[] HiddenRoomExitDestinations = {room4}; // Destination rooms for Hidden Room

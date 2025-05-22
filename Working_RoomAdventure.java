@@ -3,10 +3,11 @@ import java.util.Scanner; // Import Scanner for reading user input
 public class Working_RoomAdventure { // Main class containing game logic
 
     // class variables
+    private static int dead = 0;
     private static Room currentRoom; // The room the player is currently in
     private static String[] inventory = {null, null, null, null, null}; // Player inventory slots
     private static String status; // Message to display after each action
-    public static double lives;
+    public static int lives = 3;
 
     // constants
     final private static String DEFAULT_STATUS =
@@ -79,6 +80,43 @@ public class Working_RoomAdventure { // Main class containing game logic
 
         }
     }
+    public static void death() {
+        Room[] exitDestinations = currentRoom.getExitDestinations(); // Get rooms in those directions
+        String current = currentRoom.getName();
+        if (lives == 0){
+            setupGame();
+        }
+        else{
+          lives -=1;
+            for (int i = 0; i < exitDestinations.length; i++) { // Loop through directions
+                if (current.equals("Room 1")) { // If user direction matches
+                    currentRoom = exitDestinations[2]; // Change current room
+                    status = "You have died."; // Update status
+                }
+                if (current.equals("Room 2")) { // If user direction matches
+                    currentRoom = exitDestinations[2]; // Change current room
+                    status = "You have died."; // Update status
+                }
+                if (current.equals("Room 3")) { // If user direction matches
+                    currentRoom = exitDestinations[3]; // Change current room
+                    status = "You have died."; // Update status
+                }
+                if (current.equals("Room 4")) { // If user direction matches
+                    currentRoom = exitDestinations[3]; // Change current room
+                    status = "You have died."; // Update status
+                }
+                if (current.equals("Kitchen")) { // If user direction matches
+                    currentRoom = exitDestinations[1]; // Change current room
+                    status = "You have died."; // Update status
+                }
+                if (current.equals("Hidden Room")) { // If user direction matches
+                    currentRoom = exitDestinations[1]; // Change current room
+                    status = "You have died."; // Update status
+                }
+            }  
+        }
+        
+    }
 
     private static void handleEat(String noun){ // handles eat
         if ("food?".equals(noun)) {
@@ -96,17 +134,18 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
-    public static void setupGame() { // Initializes game world
+    private static void setupGame() { // Initializes game world
         Room room1 = new Room("Room 1"); // Create Room 1
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
         Room room4 = new Room("Room 4"); // Create Room 4
         Room kitchen = new Room("Kitchen"); //Create Kitchen
         Room HiddenRoom = new Room("Hidden Room");// Create the hidden room
-        Room Graveyard = new Room("Graveyard");
+        Room Graveyard = new Room("Graveyard"); // Creates the grave yard
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
-        Room[] room1ExitDestinations = {room2, room3}; // Destination rooms for Room 1
+        String room1name = "Room 1";// room 4 name
+        Room[] room1ExitDestinations = {room2, room3, Graveyard}; // Destination rooms for Room 1
         String[] room1Items = {"chair", "desk"}; // Items in Room 1
         String[] room1ItemDescriptions = { // Descriptions for Room 1 items
             "It is a chair",
@@ -120,9 +159,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         room1.setItemDescriptions(room1ItemDescriptions); // Set item descriptions
         room1.setGrabbables(room1Grabbables); // Set grabbable items
         room1.setThrowables(room1Throwables); // Set throwable items
+        room1.setName(room1name);
 ////////////////////room 2
         String[] room2ExitDirections = {"west", "south"}; // Room 2 exits
-        Room[] room2ExitDestinations = {room1, room4}; // Destination rooms for Room 2
+        String room2name = "Room 2";// room 4 name
+        Room[] room2ExitDestinations = {room1, room4, Graveyard}; // Destination rooms for Room 2
         String[] room2Items = {"fireplace", "rug"}; // Items in Room 2
         String[] room2ItemDescriptions = { // Descriptions for Room 2 items
             "It's on fire",
@@ -136,9 +177,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         room2.setItemDescriptions(room2ItemDescriptions); // Set item descriptions
         room2.setGrabbables(room2Grabbables); // Set grabbable items
         room2.setThrowables(room2Throwables); // Set throwable items
+        room2.setName(room2name);
 ////////////////////room 3
+        String room3name = "Room 3";// room 4 name
         String[] room3ExitDirections = {"north", "east", "west"}; // Room 3 exits
-        Room[] room3ExitDestinations = {room1, room4, kitchen}; // Destination rooms for Room 3
+        Room[] room3ExitDestinations = {room1, room4, kitchen, Graveyard}; // Destination rooms for Room 3
         String[] room3Items = {"window", "box"}; // Items in Room 3
         String[] room3ItemDescriptions = { // Descriptions for Room 3 items
             "It's noon outside",
@@ -152,10 +195,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         room3.setItemDescriptions(room3ItemDescriptions); // Set item descriptions
         room3.setGrabbables(room3Grabbables); // Set grabbable items
         room3.setThrowables(room3Throwables); // Set throwable items
+        room3.setName(room3name);
 ////////////////////room 4
-        String name = "Room 4";// room 4 name
+        String room4name = "Room 4";// room 4 name
         String[] room4ExitDirections = {"north", "west"}; // Room 3 exits
-        Room[] room4ExitDestinations = {room2, room3, HiddenRoom}; // Destination rooms for Room 4
+        Room[] room4ExitDestinations = {room2, room3, HiddenRoom, Graveyard}; // Destination rooms for Room 4
         String[] room4Items = {"chair"}; // Items in Room 4
         String[] room4ItemDescriptions = { // Descriptions for Room 4 items
             "It seems quite comfortable."
@@ -168,10 +212,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         room4.setItemDescriptions(room4ItemDescriptions); // Set item descriptions
         room4.setGrabbables(room4Grabbables); // Set grabbable items
         room4.setThrowables(room4Throwables); // Set throwable items
-        room4.setName(name);
+        room4.setName(room4name);
 ////////////////////Kitchen
         String[] kitchenExitDirections = {"east"};
-        Room[] kitchenExitDestinations = {room3};
+        String kitchenname = "Kitchen";// room 4 name
+        Room[] kitchenExitDestinations = {room3, Graveyard};
         String[] kitchenItems = {"stove"};
         String[] kitchenItemDescriptions = {
             "It seems very dusty. Looks like there is some [food?] on the stove."
@@ -184,9 +229,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         kitchen.setItemDescriptions(kitchenItemDescriptions);
         kitchen.setGrabbables(kitchenGrabbables);
         kitchen.setThrowables(kitchenThrowables); // Set throwable items
+        kitchen.setName(kitchenname);
 ////////////////////Hidden Room
         String[] HiddenRoomExitDirections = {"west"}; // Hidden Room exits
-        Room[] HiddenRoomExitDestinations = {room4}; // Destination rooms for Hidden Room
+        String HiddenRoomname = "Hidden Room";// room 4 name
+        Room[] HiddenRoomExitDestinations = {room4, Graveyard}; // Destination rooms for Hidden Room
         String[] HiddenRoomItems = {"table", "bread"}; // Items in Hidden Room
         String[] HiddenRoomItemDescriptions = { // Descriptions for Hidden Room items
             "It is a very nice table, with a loaf of bread on it.",
@@ -200,10 +247,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         HiddenRoom.setItemDescriptions(HiddenRoomItemDescriptions); // Set item descriptions
         HiddenRoom.setGrabbables(HiddenRoomGrabbables); // Set grabbable items
         HiddenRoom.setThrowables(HiddenRoomThrowables); // Set throwable items
-
+        HiddenRoom.setName(HiddenRoomname);
 ////////////////////Graveyard
         String[] GraveyardExitDirections = {"Hell"}; // Room 3 exits
-        Room[] GraveyardExitDestinations = {room1}; // Destination rooms for Room 3
+        String Graveyardname = "Graveyard";// room 4 name
+        Room[] GraveyardExitDestinations = {room1, Graveyard}; // Destination rooms for Room 3
         String[] GraveyardItems = {"Puppy"}; // Items in Room 3
         String[] GraveyardItemDescriptions = { // Descriptions for Room 3 items
             "A 3 headed black puppy.",
@@ -216,10 +264,10 @@ public class Working_RoomAdventure { // Main class containing game logic
         Graveyard.setItemDescriptions(GraveyardItemDescriptions); // Set item descriptions
         Graveyard.setGrabbables(GraveyardGrabbables); // Set grabbable items
         Graveyard.setThrowables(GraveyardThrowables); // Set throwable items        
-
+        Graveyard.setName(Graveyardname);
 //////////////////////////////////////////////////////////////////
         currentRoom = room1; // Start game in Room 1
-        lives = 3;
+        
     }
     
     @SuppressWarnings("java:S2189")
@@ -271,19 +319,6 @@ public class Working_RoomAdventure { // Main class containing game logic
 
             System.out.println(status); // Print the status message
         }
-    }
-
-    private static void death() {
-        System.out.println("You have died.");
-        
-        if (lives == 0){
-            setupGame();
-        }
-        else{
-          lives -=1;
-          currentRoom = room1;  
-        }
-        
     }
 }
 

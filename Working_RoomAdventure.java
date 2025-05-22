@@ -79,6 +79,21 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
+    private static void handleEat(String noun){
+        if ("food?".equals(noun)) {
+            for(int i = 0; i < inventory.length; i++) {
+                if ("food?".equals(inventory[i])) {
+                    inventory[i] = null;
+                    death();
+                    break;
+                }
+            }
+        }
+        else {
+            System.out.println("You can't eat that!");
+        }
+    }
+
     private static void setupGame() { // Initializes game world
         Room room1 = new Room("Room 1"); // Create Room 1
         Room room2 = new Room("Room 2"); // Create Room 2
@@ -135,11 +150,11 @@ public class Working_RoomAdventure { // Main class containing game logic
         room3.setThrowables(room3Throwables); // Set throwable items
 ////////////////////room 4
         String name = "Room 4";// room 4 name
-        String[] room4ExitDirections = {"north", "west"}; // Room 4 exits
+        String[] room4ExitDirections = {"north", "west"}; // Room 3 exits
         Room[] room4ExitDestinations = {room2, room3, HiddenRoom}; // Destination rooms for Room 4
-        String[] room4Items = {"chair", "dartboard"}; // Items in Room 4
+        String[] room4Items = {"chair"}; // Items in Room 4
         String[] room4ItemDescriptions = { // Descriptions for Room 4 items
-            "It seems quite comfortable", "I haven't played darts in forever."
+            "It seems quite comfortable."
         };
         String[] room4Grabbables = {}; // Items you can take in Room 4
         String[] room4Throwables = {"dart"}; // Items that can be thrown in Room 4
@@ -210,12 +225,20 @@ public class Working_RoomAdventure { // Main class containing game logic
                 case "throw": // If verb is 'throw'
                     handleThrow(noun);
                     break;
+                case "eat":
+                    handleEat(noun);
+                    break;
                 default: // If verb is unrecognized
                     status = DEFAULT_STATUS; // Set status to error message
             }
 
             System.out.println(status); // Print the status message
         }
+    }
+
+    private static void death() {
+        System.out.println("You have died.");
+        setupGame();
     }
 }
 
@@ -227,7 +250,6 @@ class Room { // Represents a game room
     private String[] itemDescriptions; // Descriptions for those items
     private String[] grabbables; // Items you can take
     private String[] throwables; // Items you can throw
-    
 
     public Room(String name) { // Constructor
         this.name = name; // Set the room's name

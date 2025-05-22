@@ -6,6 +6,7 @@ public class Working_RoomAdventure { // Main class containing game logic
     private static Room currentRoom; // The room the player is currently in
     private static String[] inventory = {null, null, null, null, null}; // Player inventory slots
     private static String status; // Message to display after each action
+    public static double lives;
 
     // constants
     final private static String DEFAULT_STATUS =
@@ -95,13 +96,14 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
-    private static void setupGame() { // Initializes game world
+    public static void setupGame() { // Initializes game world
         Room room1 = new Room("Room 1"); // Create Room 1
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
         Room room4 = new Room("Room 4"); // Create Room 4
         Room kitchen = new Room("Kitchen"); //Create Kitchen
         Room HiddenRoom = new Room("Hidden Room");// Create the hidden room
+        Room Graveyard = new Room("Graveyard");
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
         Room[] room1ExitDestinations = {room2, room3}; // Destination rooms for Room 1
@@ -175,11 +177,13 @@ public class Working_RoomAdventure { // Main class containing game logic
             "It seems very dusty. Looks like there is some [food?] on the stove."
         };
         String[] kitchenGrabbables = {"food?"};
+        String[] kitchenThrowables = {}; // Items that can be thrown in Room 4
         kitchen.setExitDirections(kitchenExitDirections);
         kitchen.setExitDestinations(kitchenExitDestinations);
         kitchen.setItems(kitchenItems);
         kitchen.setItemDescriptions(kitchenItemDescriptions);
         kitchen.setGrabbables(kitchenGrabbables);
+        kitchen.setThrowables(kitchenThrowables); // Set throwable items
 ////////////////////Hidden Room
         String[] HiddenRoomExitDirections = {"west"}; // Hidden Room exits
         Room[] HiddenRoomExitDestinations = {room4}; // Destination rooms for Hidden Room
@@ -196,8 +200,26 @@ public class Working_RoomAdventure { // Main class containing game logic
         HiddenRoom.setItemDescriptions(HiddenRoomItemDescriptions); // Set item descriptions
         HiddenRoom.setGrabbables(HiddenRoomGrabbables); // Set grabbable items
         HiddenRoom.setThrowables(HiddenRoomThrowables); // Set throwable items
+
+////////////////////Graveyard
+        String[] GraveyardExitDirections = {"Hell"}; // Room 3 exits
+        Room[] GraveyardExitDestinations = {room1}; // Destination rooms for Room 3
+        String[] GraveyardItems = {"Puppy"}; // Items in Room 3
+        String[] GraveyardItemDescriptions = { // Descriptions for Room 3 items
+            "A 3 headed black puppy.",
+        };
+        String[] GraveyardGrabbables = {"rock"}; // Items you can take in Room 3
+        String[] GraveyardThrowables = {}; // Items that can be thrown in Room 3
+        Graveyard.setExitDirections(GraveyardExitDirections); // Set exits
+        Graveyard.setExitDestinations(GraveyardExitDestinations); // Set exit destinations
+        Graveyard.setItems(GraveyardItems); // Set visible items
+        Graveyard.setItemDescriptions(GraveyardItemDescriptions); // Set item descriptions
+        Graveyard.setGrabbables(GraveyardGrabbables); // Set grabbable items
+        Graveyard.setThrowables(GraveyardThrowables); // Set throwable items        
+
 //////////////////////////////////////////////////////////////////
         currentRoom = room1; // Start game in Room 1
+        lives = 3;
     }
     
     @SuppressWarnings("java:S2189")
@@ -253,7 +275,15 @@ public class Working_RoomAdventure { // Main class containing game logic
 
     private static void death() {
         System.out.println("You have died.");
-        setupGame();
+        
+        if (lives == 0){
+            setupGame();
+        }
+        else{
+          lives -=1;
+          currentRoom = room1;  
+        }
+        
     }
 }
 

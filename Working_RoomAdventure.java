@@ -58,6 +58,26 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
+    private static void handleThrow (String noun){ //Handels throwing items
+        String [] throwables = currentRoom.getThrowables(); // Items that can be thrown
+        status = "I shouldn't throw that."; //Default if not throwable
+        for (String projectile : throwables){ //loop through throwable items
+            if (noun.equals(projectile)){ //If the user's noun matches a throwable
+                for (int t = 0; t < inventory.length; t++){//Sort through the inventory
+                    if (inventory[t].equals(projectile)){ // If slot has a throwable
+                        inventory[t] = null; //subtract item from inventory
+                        if (projectile.equals("dart")){
+                            status = "You thow the dart and hit the dart board" + "\nA door opens on the [east] side of the room";
+                        }
+                        break; // Exit inventory loop
+                    }
+
+                }
+            }
+
+        }
+    }
+
     private static void handleEat(String noun){
         if ("food?".equals(noun)) {
             for(int i = 0; i < inventory.length; i++) {
@@ -78,7 +98,7 @@ public class Working_RoomAdventure { // Main class containing game logic
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
         Room room4 = new Room("Room 4"); // Create Room 4
-        Room kitchen = new Room("Kitchen");
+        Room HiddenRoom = new Room("Hidden Room");// Create the hidden room
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
         Room[] room1ExitDestinations = {room2, room3}; // Destination rooms for Room 1
@@ -134,6 +154,22 @@ public class Working_RoomAdventure { // Main class containing game logic
         room4.setItems(room4Items); // Set visible items
         room4.setItemDescriptions(room4ItemDescriptions); // Set item descriptions
         room4.setGrabbables(room4Grabbables); // Set grabbable items
+////////////////////Hidden Room
+        String[] HiddenRoomExitDirections = {"west"}; // Hidden Room exits
+        Room[] HiddenRoomExitDestinations = {room4}; // Destination rooms for Hidden Room
+        String[] HiddenRoomItems = {"table", "bread"}; // Items in Hidden Room
+        String[] HiddenRoomItemDescriptions = { // Descriptions for Hidden Room items
+            "It is a very nice table, with a loaf of bread on it.",
+            "This loaf looks suspicous. Its a loaf of suspicious bread."
+        };
+        String[] HiddenRoomGrabbables = {}; // Items you can take in Hidden Room
+        String[] HiddenRoomThrowables = {}; // Items that can be thrown in Hidden Room
+        HiddenRoom.setExitDirections(HiddenRoomExitDirections); // Set exits
+        HiddenRoom.setExitDestinations(HiddenRoomExitDestinations); // Set exit destinations
+        HiddenRoom.setItems(HiddenRoomItems); // Set visible items
+        HiddenRoom.setItemDescriptions(HiddenRoomItemDescriptions); // Set item descriptions
+        HiddenRoom.setGrabbables(HiddenRoomGrabbables); // Set grabbable items
+        HiddenRoom.setThrowables(HiddenRoomThrowables); // Set throwable items
 //////////////////////////////////////////////////////////////////
         currentRoom = room1; // Start game in Room 1
     }
@@ -175,6 +211,9 @@ public class Working_RoomAdventure { // Main class containing game logic
                 case "take": // If verb is 'take'
                     handleTake(noun); // Pick up an item
                     break;
+                case "throw": // If verb is 'throw'
+                    handleThrow(noun);
+                    break;
                 case "eat":
                     handleEat(noun);
                     break;
@@ -202,6 +241,14 @@ class Room { // Represents a game room
 
     public Room(String name) { // Constructor
         this.name = name; // Set the room's name
+    }
+    
+    public void setName(String name) { // Setter for name
+        this.name = name;
+    }
+
+    public String getName() { // Getter for name
+        return name;
     }
 
     public void setExitDirections(String[] exitDirections) { // Setter for exits

@@ -131,7 +131,7 @@ public class Working_RoomAdventure { // Main class containing game logic
         Room[] kitchenExitDestinations = {room3};
         String[] kitchenItems = {"stove"};
         String[] kitchenItemDescriptions = {
-            "It seems very dusty"
+            "It seems very dusty. Looks like there is some food on the stove."
         };
         String[] kitchenGrabbables = {"food?"};
         kitchen.setExitDirections(kitchenExitDirections);

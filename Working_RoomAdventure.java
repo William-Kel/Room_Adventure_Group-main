@@ -91,27 +91,27 @@ public class Working_RoomAdventure { // Main class containing game logic
             for (int i = 0; i < exitDestinations.length; i++) { // Loop through directions
                 if (current.equals("Room 1")) { // If user direction matches
                     currentRoom = exitDestinations[2]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
                 if (current.equals("Room 2")) { // If user direction matches
                     currentRoom = exitDestinations[2]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
                 if (current.equals("Room 3")) { // If user direction matches
                     currentRoom = exitDestinations[3]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
                 if (current.equals("Room 4")) { // If user direction matches
                     currentRoom = exitDestinations[3]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
                 if (current.equals("Kitchen")) { // If user direction matches
                     currentRoom = exitDestinations[1]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
                 if (current.equals("Hidden Room")) { // If user direction matches
                     currentRoom = exitDestinations[1]; // Change current room
-                    status = "You have died."; // Update status
+                    status = "You have died. You have: " + lives+" Lives."; // Update status
                 }
             }  
         }

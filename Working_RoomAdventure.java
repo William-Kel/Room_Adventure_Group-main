@@ -16,7 +16,14 @@ public class Working_RoomAdventure { // Main class containing game logic
     private static void handleGo(String noun) { // Handles moving between rooms
         String[] exitDirections = currentRoom.getExitDirections(); // Get available directions
         Room[] exitDestinations = currentRoom.getExitDestinations(); // Get rooms in those directions
+        String current = currentRoom.getName();
         status = "I don't see that room."; // Default if direction not found
+        if (current == "Room 4"){
+            if (noun.equals("east")){
+                currentRoom = exitDestinations[2];
+                status = "Changed Room";
+            }
+        }
         for (int i = 0; i < exitDirections.length; i++) { // Loop through directions
             if (noun.equals(exitDirections[i])) { // If user direction matches
                 currentRoom = exitDestinations[i]; // Change current room
@@ -52,11 +59,49 @@ public class Working_RoomAdventure { // Main class containing game logic
         }
     }
 
+    private static void handleThrow (String noun){ //Handels throwing items
+        String [] throwables = currentRoom.getThrowables(); // Items that can be thrown
+        status = "I shouldn't throw that."; //Default if not throwable
+        for (String projectile : throwables){ //loop through throwable items
+            if (noun.equals(projectile)){ //If the user's noun matches a throwable
+                for (int t = 0; t < inventory.length; t++){//Sort through the inventory
+                    if (inventory[t].equals(projectile)){ // If slot has a throwable
+                        inventory[t] = null; //subtract item from inventory
+                        if (projectile.equals("dart")){
+                            status = "You thow the dart and hit the dart board" + "\nA door opens on the [east] side of the room";
+                        }
+                        break; // Exit inventory loop
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    private static void handleEat(String noun){ // handles eat
+        if ("food?".equals(noun)) {
+            for(int f = 0; f < inventory.length; f++) {
+                if ("food?".equals(inventory[f])) {
+                    inventory[f] = null;
+                    status = "";
+                    death();
+                    break;
+                }
+            }
+        }
+        else {
+            System.out.println("You can't eat that!");
+        }
+    }
+
     private static void setupGame() { // Initializes game world
         Room room1 = new Room("Room 1"); // Create Room 1
         Room room2 = new Room("Room 2"); // Create Room 2
         Room room3 = new Room("Room 3"); // Create Room 3
-        Room room4 = new Room("Room4"); // Create Room 4
+        Room room4 = new Room("Room 4"); // Create Room 4
+        Room kitchen = new Room("Kitchen"); //Create Kitchen
+        Room HiddenRoom = new Room("Hidden Room");// Create the hidden room
 ////////////////////room 1
         String[] room1ExitDirections = {"east", "south"}; // Room 1 exits
         Room[] room1ExitDestinations = {room2, room3}; // Destination rooms for Room 1
@@ -66,11 +111,13 @@ public class Working_RoomAdventure { // Main class containing game logic
             "It's a desk, there is a [key] on it."
         };
         String[] room1Grabbables = {"key"}; // Items you can take in Room 1
+        String[] room1Throwables = {}; // Items that can be thrown in Room 1
         room1.setExitDirections(room1ExitDirections); // Set exits
         room1.setExitDestinations(room1ExitDestinations); // Set exit destinations
         room1.setItems(room1Items); // Set visible items
         room1.setItemDescriptions(room1ItemDescriptions); // Set item descriptions
         room1.setGrabbables(room1Grabbables); // Set grabbable items
+        room1.setThrowables(room1Throwables); // Set throwable items
 ////////////////////room 2
         String[] room2ExitDirections = {"west", "south"}; // Room 2 exits
         Room[] room2ExitDestinations = {room1, room4}; // Destination rooms for Room 2
@@ -80,11 +127,13 @@ public class Working_RoomAdventure { // Main class containing game logic
             "There is a lump of [coal] on the rug."
         };
         String[] room2Grabbables = {"coal"}; // Items you can take in Room 2
+        String[] room2Throwables = {}; // Items that can be thrown in Room 2
         room2.setExitDirections(room2ExitDirections); // Set exits
         room2.setExitDestinations(room2ExitDestinations); // Set exit destinations
         room2.setItems(room2Items); // Set visible items
         room2.setItemDescriptions(room2ItemDescriptions); // Set item descriptions
         room2.setGrabbables(room2Grabbables); // Set grabbable items
+        room2.setThrowables(room2Throwables); // Set throwable items
 ////////////////////room 3
         String[] room3ExitDirections = {"north", "east", "west"}; // Room 3 exits
         Room[] room3ExitDestinations = {room1, room4, kitchen}; // Destination rooms for Room 3
@@ -94,30 +143,36 @@ public class Working_RoomAdventure { // Main class containing game logic
             "There is a sharp [dart] in the box."
         };
         String[] room3Grabbables = {"dart"}; // Items you can take in Room 3
+        String[] room3Throwables = {}; // Items that can be thrown in Room 3
         room3.setExitDirections(room3ExitDirections); // Set exits
         room3.setExitDestinations(room3ExitDestinations); // Set exit destinations
         room3.setItems(room3Items); // Set visible items
         room3.setItemDescriptions(room3ItemDescriptions); // Set item descriptions
         room3.setGrabbables(room3Grabbables); // Set grabbable items
+        room3.setThrowables(room3Throwables); // Set throwable items
 ////////////////////room 4
+        String name = "Room 4";// room 4 name
         String[] room4ExitDirections = {"north", "west"}; // Room 3 exits
-        Room[] room4ExitDestinations = {room2, room3}; // Destination rooms for Room 4
+        Room[] room4ExitDestinations = {room2, room3, HiddenRoom}; // Destination rooms for Room 4
         String[] room4Items = {"chair"}; // Items in Room 4
         String[] room4ItemDescriptions = { // Descriptions for Room 4 items
             "It seems quite comfortable."
         };
         String[] room4Grabbables = {}; // Items you can take in Room 4
+        String[] room4Throwables = {"dart"}; // Items that can be thrown in Room 4
         room4.setExitDirections(room4ExitDirections); // Set exits
         room4.setExitDestinations(room4ExitDestinations); // Set exit destinations
         room4.setItems(room4Items); // Set visible items
         room4.setItemDescriptions(room4ItemDescriptions); // Set item descriptions
         room4.setGrabbables(room4Grabbables); // Set grabbable items
+        room4.setThrowables(room4Throwables); // Set throwable items
+        room4.setName(name);
 ////////////////////Kitchen
         String[] kitchenExitDirections = {"east"};
         Room[] kitchenExitDestinations = {room3};
         String[] kitchenItems = {"stove"};
         String[] kitchenItemDescriptions = {
-            "It seems very dusty. Looks like there is some food on the stove."
+            "It seems very dusty. Looks like there is some [food?] on the stove."
         };
         String[] kitchenGrabbables = {"food?"};
         kitchen.setExitDirections(kitchenExitDirections);
@@ -125,6 +180,22 @@ public class Working_RoomAdventure { // Main class containing game logic
         kitchen.setItems(kitchenItems);
         kitchen.setItemDescriptions(kitchenItemDescriptions);
         kitchen.setGrabbables(kitchenGrabbables);
+////////////////////Hidden Room
+        String[] HiddenRoomExitDirections = {"west"}; // Hidden Room exits
+        Room[] HiddenRoomExitDestinations = {room4}; // Destination rooms for Hidden Room
+        String[] HiddenRoomItems = {"table", "bread"}; // Items in Hidden Room
+        String[] HiddenRoomItemDescriptions = { // Descriptions for Hidden Room items
+            "It is a very nice table, with a loaf of bread on it.",
+            "This loaf looks suspicous. Its a loaf of suspicious bread."
+        };
+        String[] HiddenRoomGrabbables = {}; // Items you can take in Hidden Room
+        String[] HiddenRoomThrowables = {}; // Items that can be thrown in Hidden Room
+        HiddenRoom.setExitDirections(HiddenRoomExitDirections); // Set exits
+        HiddenRoom.setExitDestinations(HiddenRoomExitDestinations); // Set exit destinations
+        HiddenRoom.setItems(HiddenRoomItems); // Set visible items
+        HiddenRoom.setItemDescriptions(HiddenRoomItemDescriptions); // Set item descriptions
+        HiddenRoom.setGrabbables(HiddenRoomGrabbables); // Set grabbable items
+        HiddenRoom.setThrowables(HiddenRoomThrowables); // Set throwable items
 //////////////////////////////////////////////////////////////////
         currentRoom = room1; // Start game in Room 1
     }
@@ -138,7 +209,7 @@ public class Working_RoomAdventure { // Main class containing game logic
             System.out.print("Inventory: "); // Prompt for inventory display
 
             for (int i = 0; i < inventory.length; i++) { // Loop through inventory slots
-                System.out.print(inventory[i] + " "); // Print each inventory item
+                System.out.print(inventory[i] + ", "); // Print each inventory item
             }
 
             System.out.println("\nWhat would you like to do? "); // Prompt user for next action
@@ -166,12 +237,23 @@ public class Working_RoomAdventure { // Main class containing game logic
                 case "take": // If verb is 'take'
                     handleTake(noun); // Pick up an item
                     break;
+                case "throw": // If verb is 'throw'
+                    handleThrow(noun);
+                    break;
+                case "eat":
+                    handleEat(noun);
+                    break;
                 default: // If verb is unrecognized
                     status = DEFAULT_STATUS; // Set status to error message
             }
 
             System.out.println(status); // Print the status message
         }
+    }
+
+    private static void death() {
+        System.out.println("You have died.");
+        setupGame();
     }
 }
 
@@ -182,9 +264,18 @@ class Room { // Represents a game room
     private String[] items; // Items visible in the room
     private String[] itemDescriptions; // Descriptions for those items
     private String[] grabbables; // Items you can take
+    private String[] throwables; // Items you can throw
 
     public Room(String name) { // Constructor
         this.name = name; // Set the room's name
+    }
+
+    public void setName(String name) { // Setter for name
+        this.name = name;
+    }
+
+    public String getName() { // Getter for name
+        return name;
     }
 
     public void setExitDirections(String[] exitDirections) { // Setter for exits
@@ -227,16 +318,24 @@ class Room { // Represents a game room
         return grabbables;
     }
 
+    public void setThrowables(String[] throwables){// Setter for throwable items
+        this.throwables = throwables;
+    }
+
+    public String[] getThrowables(){ // Getter for throwable items
+        return throwables;
+    }
+
     @Override
     public String toString() { // Custom print for the room
         String result = "\nLocation: " + name; // Show room name
         result += "\nYou See: "; // List items
         for (String item : items) { // Loop items
-            result += item + " "; // Append each item
+            result += item + ", "; // Append each item
         }
         result += "\nExits: "; // List exits
         for (String direction : exitDirections) { // Loop exits
-            result += direction + " "; // Append each direction
+            result += direction + ", "; // Append each direction
         }
         return result + "\n"; // Return full description
     }

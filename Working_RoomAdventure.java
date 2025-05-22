@@ -3,7 +3,6 @@ import java.util.Scanner; // Import Scanner for reading user input
 public class Working_RoomAdventure { // Main class containing game logic
 
     // class variables
-    private static int dead = 0;
     private static Room currentRoom; // The room the player is currently in
     private static String[] inventory = {null, null, null, null, null}; // Player inventory slots
     private static String status; // Message to display after each action

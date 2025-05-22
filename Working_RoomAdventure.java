@@ -15,13 +15,13 @@ public class Working_RoomAdventure { // Main class containing game logic
         String[] exitDirections = currentRoom.getExitDirections(); // Get available directions
         Room[] exitDestinations = currentRoom.getExitDestinations(); // Get rooms in those directions
         status = "I don't see that room."; // Default if direction not found
-        for (int i = 0; i < exitDirections.length; i++) { // Loop through directions
-            if (current == "Room 4"){
-                if (noun.equals("east")){
-                    currentRoom = exitDestinations[2];
-                    status = "Changed Room";
-                }
+        if (current == "Room 4"){
+            if (noun.equals("east")){
+                currentRoom = exitDestinations[2];
+                status = "Changed Room";
             }
+        }
+        for (int i = 0; i < exitDirections.length; i++) { // Loop through directions
             if (noun.equals(exitDirections[i])) { // If user direction matches
                 currentRoom = exitDestinations[i]; // Change current room
                 status = "Changed Room"; // Update status
